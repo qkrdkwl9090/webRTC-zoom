@@ -17,14 +17,24 @@ const handleListen = () => console.log("Hello World!");
 const server = http.createServer(app);
 // webSocket server
 const wss = new WebSocket.Server({ server });
-
+const sockets = [];
 wss.on("connection", (socket) => {
+  sockets.push(socket);
   console.log("Connected to Browser ✅");
   socket.on("message", (message) => {
-    console.log(message);
+    const msg = JSON.parse(message);
+    switch (msg.type) {
+      case "new_message":
+        sockets.forEach((aSocket) =>
+          aSocket.send(`${socket?.nickname || "unknown"}: ${msg.payload}`)
+        );
+        break;
+      case "nickname":
+        socket["nickname"] = msg.payload;
+        break;
+    }
   });
   socket.on("close", () => console.log("Disconnected from the Browser ❌"));
-  socket.send("hello");
 });
 
 server.listen(3000, handleListen);
