@@ -53,8 +53,19 @@ const handleRoomSubmit = (event) => {
 
 form.addEventListener("submit", handleRoomSubmit);
 
-socket.on("welcome", (name) => addMessage(`${name ?? "unknown"} arrived!!!`));
-socket.on("bye", (name) => addMessage(`${name} left!!!`));
+const setCount = (count) => {
+  const h3 = room.querySelector("h3");
+  h3.innerText = `Room ${roomName} (${count})`;
+};
+
+socket.on("welcome", (name, newCount) => {
+  setCount(newCount);
+  addMessage(`${name ?? "unknown"} arrived!!!`);
+});
+socket.on("bye", (name, newCount) => {
+  setCount(newCount);
+  addMessage(`${name} left!!!`);
+});
 socket.on("new_message", (message) => addMessage(message));
 socket.on("room_change", (rooms) => {
   const roomList = welcome.querySelector("ul");
