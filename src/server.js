@@ -25,36 +25,21 @@ io.on("connection", (socket) => {
   socket.on("enter_room", (roomName, done) => {
     socket.join(roomName);
     done();
-    socket.to(roomName).emit("welcome");
+    socket.to(roomName).emit("welcome", socket.nickname);
   });
   socket.on("new_message", (message, room, done) => {
-    socket.to(room).emit("new_message", message);
+    socket.to(room).emit("new_message", `${socket.nickname}: ${message}`);
+    done();
+  });
+  socket.on("nickname", (nickname, done) => {
+    socket["nickname"] = nickname;
     done();
   });
   socket.on("disconnecting", () => {
-    socket.rooms.forEach((room) => socket.to(room).emit("bye"));
+    socket.rooms.forEach((room) =>
+      socket.to(room).emit("bye", socket.nickname)
+    );
   });
 });
-
-// webSocket server
-// const sockets = [];
-// wss.on("connection", (socket) => {
-//   sockets.push(socket);
-//   console.log("Connected to Browser ✅");
-//   socket.on("message", (message) => {
-//     const msg = JSON.parse(message);
-//     switch (msg.type) {
-//       case "new_message":
-//         sockets.forEach((aSocket) =>
-//           aSocket.send(`${socket?.nickname || "unknown"}: ${msg.payload}`)
-//         );
-//         break;
-//       case "nickname":
-//         socket["nickname"] = msg.payload;
-//         break;
-//     }
-//   });
-//   socket.on("close", () => console.log("Disconnected from the Browser ❌"));
-// });
 
 server.listen(3000, handleListen);
