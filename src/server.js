@@ -18,6 +18,19 @@ const server = http.createServer(app);
 // socket.io server
 const io = SocketIO(server);
 
+const publicRooms = () => {
+  const {
+    sockets: {
+      adapter: { sids, rooms },
+    },
+  } = io;
+  const publicRooms = [];
+  rooms.forEach((_, key) => {
+    if (sids.get(key) === undefined) publicRooms.push(key);
+  });
+  return publicRooms;
+};
+
 io.on("connection", (socket) => {
   socket.onAny((event) => {
     console.log("Socket Event: " + event);
@@ -26,6 +39,7 @@ io.on("connection", (socket) => {
     socket.join(roomName);
     done();
     socket.to(roomName).emit("welcome", socket.nickname);
+    io.sockets.emit("room_change", publicRooms());
   });
   socket.on("new_message", (message, room, done) => {
     socket.to(room).emit("new_message", `${socket.nickname}: ${message}`);
@@ -39,6 +53,9 @@ io.on("connection", (socket) => {
     socket.rooms.forEach((room) =>
       socket.to(room).emit("bye", socket.nickname)
     );
+  });
+  socket.on("disconnect", () => {
+    io.sockets.emit("room_change", publicRooms());
   });
 });
 
