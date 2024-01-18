@@ -19,7 +19,21 @@ const server = http.createServer(app);
 const io = SocketIO(server);
 
 io.on("connection", (socket) => {
-  console.log(socket);
+  socket.onAny((event) => {
+    console.log("Socket Event: " + event);
+  });
+  socket.on("enter_room", (roomName, done) => {
+    socket.join(roomName);
+    done();
+    socket.to(roomName).emit("welcome");
+  });
+  socket.on("new_message", (message, room, done) => {
+    socket.to(room).emit("new_message", message);
+    done();
+  });
+  socket.on("disconnecting", () => {
+    socket.rooms.forEach((room) => socket.to(room).emit("bye"));
+  });
 });
 
 // webSocket server

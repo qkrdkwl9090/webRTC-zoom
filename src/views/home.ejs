@@ -10,7 +10,22 @@
     <header>
       <h1>Zoom</h1>
     </header>
-    <main></main>
+    <main>
+      <div id="welcome">
+        <form>
+          <input placeholder="Room Name" type="text" required></input>
+          <button>Enter Room</button>
+        </form>
+      </div>
+      <div id="room">
+        <h3></h3>
+        <ul></ul>
+        <form>
+          <input placeholder="Input Message" type="text" required></input>
+          <button>Send</button>
+        </form>
+      </div>
+    </main>
     <script src="/socket.io/socket.io.js"></script>
     <script src="/public/js/app.js"></script>
   </body>
