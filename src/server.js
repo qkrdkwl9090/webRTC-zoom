@@ -64,6 +64,9 @@ io.on("connection", (socket) => {
   socket.on("disconnect", () => {
     io.sockets.emit("room_change", publicRooms());
   });
+  socket.on("offer", (offer, roomName) => {
+    socket.to(roomName).emit("offer", offer);
+  });
 });
 
 server.listen(3000, handleListen);
