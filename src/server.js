@@ -34,6 +34,11 @@ const publicRooms = () => {
 const countRoom = (roomName) => io.sockets.adapter.rooms.get(roomName)?.size;
 
 io.on("connection", (socket) => {
+  socket.on("join_room", (roomName, done) => {
+    socket.join(roomName);
+    done();
+    socket.to(roomName).emit("welcome");
+  });
   socket.onAny((event) => {
     console.log("Socket Event: " + event);
   });
