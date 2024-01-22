@@ -3,28 +3,46 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="https://unpkg.com/mvp.css" />
+    <script src="https://cdn.tailwindcss.com"></script>
     <title>Zoom Clone</title>
   </head>
-  <body>
-    <header>
-      <h1>Zoom</h1>
+  <body class="bg-slate-600">
+    <header class="py-4 text-center">
+      <h1 class="text-blue-400 font-bold text-4xl">Zoom</h1>
     </header>
-    <main>
-      <div id="welcome">
+    <main class="mt-10 mx-auto w-[1200px]">
+      <div id="welcome" class="flex justify-center items-center">
         <form>
-          <input type="text" required placeholder="Room Name" />
-          <button>Enter Room</button>
+          <input class="block" type="text" required placeholder="Room Name" />
+          <button
+            class="block bg-blue-500 px-10 py-4 rounded-2xl mt-2 mx-auto text-white"
+          >
+            Enter Room
+          </button>
         </form>
       </div>
       <div id="call">
-        <div id="myStream">
-          <video id="myFace" src="" autoplay width="400" height="400"></video>
-          <button id="mute">Mute</button>
-          <button id="camera">Turn Camera Off</button>
-          <select id="cameras">
-            <option value="device">Face Camera</option>
-          </select>
+        <div id="myStream" class="flex justify-between items-start">
+          <div>
+            <video id="myFace" src="" autoplay width="400" height="400"></video>
+            <div class="flex justify-around mt-4">
+              <button
+                id="mute"
+                class="block bg-blue-500 px-4 py-2 rounded-xl text-white"
+              >
+                Mute
+              </button>
+              <button
+                id="camera"
+                class="block bg-blue-500 px-4 py-2 rounded-xl text-white"
+              >
+                Turn Camera Off
+              </button>
+            </div>
+            <select id="cameras" class="mt-4 w-full">
+              <option value="device">Face Camera</option>
+            </select>
+          </div>
           <video id="peerFace" autoplay width="400" height="400"></video>
         </div>
       </div>
